@@ -105,15 +105,21 @@ export default function Navbar() {
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="min-w-[160px]">
-                  <DropdownMenuItem onClick={() => changeLang("en")}>
-                    {tLang("english")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => changeLang("es")}>
-                    {tLang("spanish")}
-                  </DropdownMenuItem>
-                  <DropdownMenuItem onClick={() => changeLang("fr")}>
-                    {tLang("french")}
-                  </DropdownMenuItem>
+                  <Link href={"https://www.celesteiq.fr/"}>
+                    <DropdownMenuItem>
+                      French
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href={"https://www.celesteiq.com/"}>
+                    <DropdownMenuItem>
+                      English
+                    </DropdownMenuItem>
+                  </Link>
+                  <Link href={"/"}>
+                    <DropdownMenuItem>
+                      Spanish
+                    </DropdownMenuItem>
+                  </Link>
                 </DropdownMenuContent>
               </DropdownMenu>
 
@@ -142,15 +148,21 @@ export default function Navbar() {
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="min-w-[160px]">
-                <DropdownMenuItem onClick={() => changeLang("en")}>
-                  {tLang("english")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLang("es")}>
-                  {tLang("spanish")}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => changeLang("fr")}>
-                  {tLang("french")}
-                </DropdownMenuItem>
+                <Link href={"https://www.celesteiq.fr/"}>
+                  <DropdownMenuItem>
+                    French
+                  </DropdownMenuItem>
+                </Link>
+                <Link href={"https://www.celesteiq.com/"}>
+                  <DropdownMenuItem>
+                    English
+                  </DropdownMenuItem>
+                </Link>
+                <Link href={"/"}>
+                  <DropdownMenuItem>
+                    Spanish
+                  </DropdownMenuItem>
+                </Link>
               </DropdownMenuContent>
             </DropdownMenu>
 
