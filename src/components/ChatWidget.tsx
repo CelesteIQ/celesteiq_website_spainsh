@@ -18,7 +18,6 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 
-// Markdown + highlighting (same style as your previous component)
 import ReactMarkdown from "react-markdown";
 import remarkGfm from "remark-gfm";
 import rehypeHighlight from "rehype-highlight";
@@ -36,8 +35,8 @@ const initialMessages: Message[] = [
     id: "m1",
     role: "bot",
     content:
-      "Hi! I’m the CelesteIQ assistant. Ask me anything about our packages, audits, or Microsoft + AI solutions.",
-    time: "Now",
+      "¡Hola! Soy el asistente de CelesteIQ. Pregúntame sobre nuestros paquetes, auditorías o soluciones de Microsoft + IA.",
+    time: "Ahora",
   },
 ];
 
@@ -59,7 +58,7 @@ export default function ChatWidget() {
       id: `u-${Date.now()}`,
       role: "user",
       content: question,
-      time: "Now",
+      time: "Ahora",
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -75,13 +74,14 @@ export default function ChatWidget() {
       const data = await res.json();
 
       const botText =
-        data?.text || "I couldn’t get a response right now. Please try again.";
+        data?.text ||
+        "No pude obtener una respuesta en este momento. Por favor, inténtalo de nuevo.";
 
       const botMessage: Message = {
         id: `b-${Date.now()}`,
         role: "bot",
         content: botText,
-        time: "Now",
+        time: "Ahora",
       };
 
       setMessages((prev) => [...prev, botMessage]);
@@ -90,8 +90,9 @@ export default function ChatWidget() {
       const botMessage: Message = {
         id: `b-error-${Date.now()}`,
         role: "bot",
-        content: "Something went wrong while answering. Please try again.",
-        time: "Now",
+        content:
+          "Algo salió mal al procesar tu pregunta. Por favor, inténtalo de nuevo.",
+        time: "Ahora",
       };
       setMessages((prev) => [...prev, botMessage]);
     } finally {
@@ -113,10 +114,10 @@ export default function ChatWidget() {
                   </span>
                   <div>
                     <CardTitle className="text-base leading-tight">
-                      CelesteIQ Assistant
+                      Asistente CelesteIQ
                     </CardTitle>
                     <p className="text-xs text-slate-600">
-                      {loading ? "Typing…" : "Online • Ask anything"}
+                      {loading ? "Escribiendo…" : "En línea • Pregunta lo que quieras"}
                     </p>
                   </div>
                 </div>
@@ -125,7 +126,7 @@ export default function ChatWidget() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Minimize chat"
+                    aria-label="Minimizar chat"
                     onClick={() => setMinimized(true)}
                     className="h-8 w-8 text-slate-600 hover:bg-orange-100"
                   >
@@ -134,7 +135,7 @@ export default function ChatWidget() {
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Close chat"
+                    aria-label="Cerrar chat"
                     onClick={() => setOpen(false)}
                     className="h-8 w-8 text-slate-600 hover:bg-orange-100"
                   >
@@ -155,13 +156,13 @@ export default function ChatWidget() {
                   {loading && (
                     <div className="flex items-center gap-2 text-xs text-slate-500">
                       <Loader2 className="h-3 w-3 animate-spin" />
-                      <span>Thinking…</span>
+                      <span>Pensando…</span>
                     </div>
                   )}
 
                   {messages.length === 0 && !loading && (
                     <p className="text-sm text-muted-foreground">
-                      Hi, how are you?
+                      Hola, ¿cómo puedo ayudarte?
                     </p>
                   )}
                 </div>
@@ -178,7 +179,7 @@ export default function ChatWidget() {
                 }}
               >
                 <Textarea
-                  placeholder="Ask about packages, audits, pricing..."
+                  placeholder="Pregunta sobre paquetes, auditorías, precios..."
                   className="min-h-[44px] max-h-[120px] resize-none"
                   value={input}
                   disabled={loading}
@@ -200,7 +201,7 @@ export default function ChatWidget() {
                   ) : (
                     <Send className="h-4 w-4" />
                   )}
-                  <span className="sr-only">Send</span>
+                  <span className="sr-only">Enviar</span>
                 </Button>
               </form>
             </CardContent>
@@ -212,7 +213,7 @@ export default function ChatWidget() {
       {open && minimized && (
         <div className="mb-3 w-[min(380px,calc(100vw-2rem))] sm:w-[380px]">
           <button
-            aria-label="Restore chat"
+            aria-label="Restaurar chat"
             onClick={() => setMinimized(false)}
             className="
               flex w-full items-center justify-between
@@ -226,9 +227,11 @@ export default function ChatWidget() {
               </span>
               <div className="text-sm">
                 <p className="font-medium leading-tight">
-                  CelesteIQ Assistant
+                  Asistente CelesteIQ
                 </p>
-                <p className="text-xs text-slate-500">Click to reopen chat</p>
+                <p className="text-xs text-slate-500">
+                  Haz clic para reabrir el chat
+                </p>
               </div>
             </div>
             <X
@@ -248,7 +251,7 @@ export default function ChatWidget() {
         <button
           onClick={() => setOpen(true)}
           aria-expanded={open}
-          aria-label="Open chat"
+          aria-label="Abrir chat"
           className="
             relative grid h-14 w-14 place-items-center 
             transition hover:scale-105 
@@ -272,8 +275,9 @@ function MessageBubble({ message }: { message: Message }) {
 
   return (
     <div
-      className={`flex items-start gap-2 ${isBot ? "" : "justify-end text-right"
-        }`}
+      className={`flex items-start gap-2 ${
+        isBot ? "" : "justify-end text-right"
+      }`}
     >
       {/* Avatar */}
       {isBot ? (
@@ -288,10 +292,11 @@ function MessageBubble({ message }: { message: Message }) {
 
       {/* Bubble */}
       <div
-        className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 leading-relaxed ${isBot
+        className={`max-w-[80%] rounded-2xl px-3.5 py-2.5 leading-relaxed ${
+          isBot
             ? "bg-orange-50 text-slate-800 ring-1 ring-orange-200"
             : "bg-white text-slate-900 ring-1 ring-slate-200"
-          }`}
+        }`}
       >
         {isBot ? (
           <div className="prose prose-xs sm:prose-sm max-w-none dark:prose-invert">

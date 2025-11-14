@@ -1704,7 +1704,7 @@ export default function HomePage() {
                                         asChild
                                         className="bg-[#FF7A00] px-5 text-white hover:bg-[#FF7A00]"
                                     >
-                                        <Link href={featured?.slug ? `/blog/${featured.slug}` : "/blog"}>
+                                        <Link href={"/blog"}>
                                             {featured?.buttonText || h("blogSection.featured.cta")}
                                             <ArrowRight className="ml-2 h-4 w-4" />
                                         </Link>
@@ -1737,7 +1737,7 @@ export default function HomePage() {
                                             </span>
                                         </div>
                                         <Link
-                                            href={blog.slug ? `/blog/${blog.slug}` : "/blog"}
+                                            href={"/blog"}
                                             className="mt-3 block text-base font-medium text-slate-900 hover:underline"
                                         >
                                             {blog.title}
