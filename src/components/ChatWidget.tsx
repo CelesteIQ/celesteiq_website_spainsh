@@ -48,6 +48,15 @@ export default function ChatWidget() {
   const [input, setInput] = React.useState("");
   const [loading, setLoading] = React.useState(false);
 
+  // 🔥 NUEVO: referencia al final de la lista para hacer scroll automático
+  const bottomRef = React.useRef<HTMLDivElement | null>(null);
+
+  // 🔥 NUEVO: cuando cambian los mensajes (y el chat está abierto), baja al final
+  React.useEffect(() => {
+    if (!open) return;
+    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages, open]);
+
   async function handleAsk() {
     if (!input.trim() || loading) return;
 
@@ -117,7 +126,9 @@ export default function ChatWidget() {
                       Asistente CelesteIQ
                     </CardTitle>
                     <p className="text-xs text-slate-600">
-                      {loading ? "Escribiendo…" : "En línea • Pregunta lo que quieras"}
+                      {loading
+                        ? "Escribiendo…"
+                        : "En línea • Pregunta lo que quieras"}
                     </p>
                   </div>
                 </div>
@@ -165,6 +176,9 @@ export default function ChatWidget() {
                       Hola, ¿cómo puedo ayudarte?
                     </p>
                   )}
+
+                  {/* 🔥 Punto final para que scrollIntoView lo use */}
+                  <div ref={bottomRef} />
                 </div>
               </ScrollArea>
 
