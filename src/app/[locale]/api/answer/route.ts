@@ -1,15 +1,12 @@
-// app/api/answer/route.ts  (or wherever this lives)
 import { NextResponse } from "next/server";
 import { GoogleGenAI } from "@google/genai";
-import Data from "@/data/packages.json";
+import Data from "@/data/packages.json"; // full training data
 
-// ✅ Helper: build a smaller, relevant context for this specific question
 function buildContextForQuestion(question: string) {
   const q = question.toLowerCase();
 
   const { brand, contact, packages, faq, routing } = Data as any;
 
-  // 1) Decide which packages are most relevant based on routing triggers
   const relevantIds = new Set<string>();
 
   if (routing?.packageSuggestionRules) {
@@ -26,27 +23,18 @@ function buildContextForQuestion(question: string) {
   let filteredPackages: any[];
 
   if (relevantIds.size > 0) {
-    // Only the packages that match the triggers
     filteredPackages = (packages || []).filter((p: any) =>
       relevantIds.has(p.id)
     );
   } else {
-    // Fallback: send only light info for all packages
-    filteredPackages = (packages || []).map((p: any) => ({
-      id: p.id,
-      name: p.name,
-      headline: p.headline,
-      summary: p.summary,
-    }));
+    filteredPackages = packages || [];
   }
 
-  // 2) Filter FAQ: simple keyword match, then cap to a few entries
   const filteredFaq =
     (faq || [])
       .filter((item: any) => {
         const fq = (item.q || "").toLowerCase();
         if (!fq) return false;
-        // match on any word from the question
         return q
           .split(/\W+/)
           .some((word) => word && fq.includes(word.toLowerCase()));
@@ -70,29 +58,46 @@ export async function POST(req: Request) {
     });
 
     const CONTACT_EMAIL =
-      process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "support@celesteiq.com";
+      process.env.NEXT_PUBLIC_SUPPORT_EMAIL || "hello@celesteiq.com";
 
     const systemInstruction = `
-You are the CelesteIQ Assistant.
+You are the CelesteIQ Assistant, acting as a presales consultant.
 
-- Your default language is Spanish. Always reply in Spanish unless the user clearly writes in English.
+LANGUAGE
+- Your default language is Spanish. Reply in Spanish unless the user clearly writes in English.
 - If the user writes in English, reply in English. If the user writes in Spanish, reply in Spanish.
+
+ROLE
+- Your job is to understand the user's situation and recommend the most suitable CelesteIQ package(s).
+- Always try to:
+  1) Rephrase the user's need in 1 short sentence,
+  2) Recommend one or two relevant packages from the Context,
+  3) Explain briefly how those packages address the problem,
+  4) Offer a clear next step (e.g., contact email or book a consultation).
+
+SCOPE
 - Only answer questions about CelesteIQ: its Microsoft + AI services, packages, audits, security, training, and contact options.
-- Use the JSON "Context" as your source of truth.
-- If the user asks something not in the Context or about pricing/contracts/refunds, say:
-  "Para este tipo de consulta, por favor contacte a nuestro equipo en ${CONTACT_EMAIL} para recibir más información."
-- Be brief, friendly, and professional. Use bullet points when helpful.
+- Use the JSON "Context" as your source of truth. Prefer mapping the user's need to the closest package rather than saying you don't know.
+
+PRICING / CONTRACTS / OUT-OF-SCOPE
+- If the user asks clearly about pricing, specific contract terms, or something not covered in the Context, you can say for example (in the appropriate language):
+  "Para detalles precisos de precios o condiciones contractuales, el mejor siguiente paso es contactar con nuestro equipo en ${CONTACT_EMAIL} para que podamos revisar tu situación."
+- If the question is completely outside CelesteIQ's services, say briefly that it is out of scope and optionally suggest contacting the team.
+
+STYLE
+- Be brief, friendly, and professional.
+- Use bullet points when helpful.
+- Sound like a human Microsoft + AI consultant, not like a generic chatbot.
 - Never talk about how you were built or about AI models.
 `;
 
-    // ✅ Build a *small* context just for this question (token-friendly)
     const contextObj = buildContextForQuestion(question);
 
     const contents = `
 Question:
 ${question}
 
-Context (only relevant slice of data):
+Context (relevant data about CelesteIQ):
 ${JSON.stringify(contextObj)}
 `;
 
@@ -110,8 +115,8 @@ ${JSON.stringify(contextObj)}
       typeof (response as any).text === "function"
         ? await (response as any).text()
         : (response as any).text ??
-          (response as any)?.response?.text?.() ??
-          "No response text found.";
+        (response as any)?.response?.text?.() ??
+        "No response text found.";
 
     return NextResponse.json({ text });
   } catch (err: any) {
