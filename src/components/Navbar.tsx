@@ -44,7 +44,7 @@ export default function Navbar() {
   return (
     <header className="w-full absolute top-0 left-0">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 items-center justify-between">
+        <div className="flex h-20 md:h-24 items-center justify-between">
           {/* Brand */}
           <Link href="/" className="flex items-center gap-3" aria-label="Home">
              <Image
