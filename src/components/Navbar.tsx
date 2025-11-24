@@ -47,11 +47,11 @@ export default function Navbar() {
         <div className="flex h-16 items-center justify-between">
           {/* Brand */}
           <Link href="/" className="flex items-center gap-3" aria-label="Home">
-            <Image
-              src="/weblogo.svg"
-              width={100}
-              height={100}
-              className="w-auto h-8"
+             <Image
+              src="/logo2.png"
+              width={200}
+              height={200}
+              className="w-auto md:h-24 h-16"
               alt="logo"
             />
           </Link>
@@ -181,11 +181,11 @@ export default function Navbar() {
               <SheetContent side="right" className="w-[300px] sm:w-[360px]">
                 <SheetHeader>
                   <SheetTitle className="text-left">
-                    <Image
-                      src="/weblogo.svg"
-                      width={100}
-                      height={100}
-                      className="w-auto h-8 invert"
+                   <Image
+                      src="/logo2.png"
+                      width={200}
+                      height={200}
+                      className="w-auto h-24 invert"
                       alt="logo"
                     />
                   </SheetTitle>
